@@ -1,73 +1,131 @@
-# React + TypeScript + Vite
+# OPM Equity Valuation Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A single-page React web application for calculating common and preferred stock prices using the Option Pricing Model (OPM) methodology.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The OPM Equity Valuation app provides a user-friendly interface for equity valuation using the Option Pricing Model with Black-Scholes calculations. Users can input their cap table and assumptions, then calculate valuations with full transparency.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Interactive Cap Table Input**: Add and manage multiple securities (common and preferred stock)
+- **Flexible Assumptions**: Configure equity value, volatility, risk-free rate, and time to exit
+- **Real-time Calculations**: Instant OPM valuations using Black-Scholes formula
+- **Detailed Results**: View per-share values, total values, and ownership percentages
+- **Persistent Storage**: Scenarios saved automatically in localStorage
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **100% Client-Side**: All calculations run in the browser, no backend required
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 18** with **TypeScript** for type-safe component development
+- **Vite** for fast development and optimized builds
+- **Tailwind CSS** for modern, responsive styling
+- **Lucide React** for beautiful icons
+- **Recharts** (available for future charting features)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js 16+ installed
+- npm or yarn package manager
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usage
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. **Add Securities**: Click "Add Security" to add entries to your cap table
+   - Specify name, type (Common/Preferred), and number of shares
+   - For preferred stock, set the liquidation preference
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. **Configure Assumptions**:
+   - **Total Equity Value**: The estimated total value of the company's equity
+   - **Volatility**: Expected volatility (typically 30-70%)
+   - **Risk-Free Rate**: Current risk-free interest rate (e.g., 10-year Treasury)
+   - **Time to Exit**: Expected years until liquidity event
+
+3. **Calculate**: Click "Calculate Valuation" to run the OPM calculations
+
+4. **Review Results**: View detailed breakdowns including:
+   - Total equity value allocation
+   - Common vs preferred stock values
+   - Per-share and total valuations for each security
+   - Percentage ownership
+
+## How OPM Works
+
+The Option Pricing Model treats each class of stock as a call option on the company's equity value:
+
+1. **Breakpoints** are calculated based on liquidation preferences
+2. **Black-Scholes** formula values each security class as a call spread
+3. **Value allocation** distributes equity value to each security based on their option values
+
+This provides a market-based approach to equity allocation that accounts for:
+- Liquidation preferences
+- Capital structure
+- Time value of money
+- Volatility of equity value
+
+## Project Structure
+
 ```
+opm-app/
+├── src/
+│   ├── components/          # React components
+│   │   ├── CapTableInput.tsx
+│   │   ├── AssumptionsInput.tsx
+│   │   └── ResultsDisplay.tsx
+│   ├── hooks/              # Custom React hooks
+│   │   └── useLocalStorage.ts
+│   ├── types/              # TypeScript type definitions
+│   │   └── index.ts
+│   ├── utils/              # Calculation utilities
+│   │   ├── blackScholes.ts
+│   │   └── opmCalculator.ts
+│   ├── App.tsx             # Main application component
+│   ├── main.tsx            # Application entry point
+│   └── index.css           # Global styles
+├── public/                 # Static assets
+├── index.html             # HTML template
+└── package.json           # Project dependencies
+```
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint
+
+### Type Checking
+
+The project uses TypeScript for type safety. Run type checking with:
+
+```bash
+npm run build
+```
+
+## License
+
+MIT
+
+## Support
+
+For issues or questions, please open an issue on the GitHub repository.
